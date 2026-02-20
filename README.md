@@ -3,14 +3,14 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.3 |
-| <a name="requirement_azuredevops"></a> [azuredevops](#requirement\_azuredevops) | 1.9.0 |
+| <a name="requirement_azuredevops"></a> [azuredevops](#requirement\_azuredevops) | 1.12.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuredevops"></a> [azuredevops](#provider\_azuredevops) | 1.9.0 |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.43.0 |
+| <a name="provider_azuredevops"></a> [azuredevops](#provider\_azuredevops) | 1.12.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.55.0 |
 
 ## Modules
 
@@ -20,8 +20,8 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azuredevops_git_repository.main](https://registry.terraform.io/providers/microsoft/azuredevops/1.9.0/docs/resources/git_repository) | resource |
-| [azuredevops_project.main](https://registry.terraform.io/providers/microsoft/azuredevops/1.9.0/docs/data-sources/project) | data source |
+| [azuredevops_git_repository.main](https://registry.terraform.io/providers/microsoft/azuredevops/1.12.0/docs/resources/git_repository) | resource |
+| [azuredevops_project.main](https://registry.terraform.io/providers/microsoft/azuredevops/1.12.0/docs/data-sources/project) | data source |
 | [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 
 ## Inputs
