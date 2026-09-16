@@ -1,43 +1,68 @@
-variable "repositories" {
-  description = <<EOT
-Map of repositories to create. Each repository can have its own default branch.
-
-Example:
-repositories = {
-  repo1 = {
-    name           = "repo1"
-    default_branch = "main"
-  }
-  repo2 = {
-    name           = "repo2"
-    default_branch = "master"
-  }
-}
-EOT
-  type = map(object({
-    name           = string
-    default_branch = optional(string)
-  }))
+variable "project_id" {
+  description = "The ID of the Azure DevOps project in which to create the repository."
+  type        = string
 }
 
-variable "repo_enabled" {
-  description = "Boolean flag to control whether repositories should be created."
-  type        = bool
-  default     = true
+variable "name" {
+  description = "The name of the Git repository."
+  type        = string
+}
+
+variable "default_branch" {
+  description = "The default branch of the repository."
+  type        = string
+  default     = "refs/heads/main"
+}
+
+variable "parent_repository_id" {
+  description = "The ID of a repository to fork. Only applicable when init_type is 'Fork'."
+  type        = string
+  default     = null
 }
 
 variable "init_type" {
-  description = <<EOT
-Defines how the repository should be initialized:
-- Uninitialized: Creates an empty repository
-- Clean: Creates a repository with a README
-- Import: Imports content from an existing repository
-EOT
+  description = "How the repository should be initialized. Valid values: 'Clean', 'Fork', 'Import', 'Uninitialized'."
   type        = string
   default     = "Clean"
+
+  validation {
+    condition     = contains(["Clean", "Fork", "Import", "Uninitialized"], var.init_type)
+    error_message = "init_type must be one of 'Clean', 'Fork', 'Import', or 'Uninitialized'."
+  }
 }
 
-variable "azuredevops_project" {
-  description = "The name of the Azure DevOps project where repositories will be created."
+variable "source_type" {
+  description = "The type of source when importing a repository. Only applicable when init_type is 'Import'. Valid value: 'Git'."
   type        = string
+  default     = null
+}
+
+variable "source_url" {
+  description = "The URL of the source repository when importing. Only applicable when init_type is 'Import'."
+  type        = string
+  default     = null
+}
+
+variable "service_connection_id" {
+  description = "The ID of the service connection used for private repository imports. Only applicable when init_type is 'Import'."
+  type        = string
+  default     = null
+}
+
+variable "enable_branch_protection" {
+  description = "Whether to enable minimum reviewer count branch protection policy."
+  type        = bool
+  default     = false
+}
+
+variable "min_reviewer_count" {
+  description = "The minimum number of reviewers required for pull requests on the protected branch."
+  type        = number
+  default     = 1
+}
+
+variable "protected_branch" {
+  description = "The branch ref to apply the protection policy to."
+  type        = string
+  default     = "refs/heads/main"
 }

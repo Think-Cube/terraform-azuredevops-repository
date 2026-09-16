@@ -1,16 +1,40 @@
+# Terraform Module — Azure DevOps Git Repository
+
+Provisions an `azuredevops_git_repository` with a configurable default branch, initialization type, and optional branch protection policies.
+
+## Usage
+
+```hcl
+module "ado_repo" {
+  source = "github.com/Think-Cube/terraform-azuredevops-repository?ref=v1.0.0"
+
+  project_id     = "00000000-1111-2222-3333-444444444444"
+  name           = "my-service"
+  default_branch = "refs/heads/main"
+
+  initialization = {
+    init_type = "Clean"
+  }
+
+  enable_branch_protection = true
+  min_reviewer_count       = 1
+  protected_branch         = "refs/heads/main"
+}
+```
+
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.3 |
-| <a name="requirement_azuredevops"></a> [azuredevops](#requirement\_azuredevops) | 1.13.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
+| <a name="requirement_azuredevops"></a> [azuredevops](#requirement\_azuredevops) | ~> 1.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuredevops"></a> [azuredevops](#provider\_azuredevops) | 1.13.0 |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.61.0 |
+| <a name="provider_azuredevops"></a> [azuredevops](#provider\_azuredevops) | ~> 1.0 |
 
 ## Modules
 
@@ -20,24 +44,33 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azuredevops_git_repository.main](https://registry.terraform.io/providers/microsoft/azuredevops/1.13.0/docs/resources/git_repository) | resource |
-| [azuredevops_project.main](https://registry.terraform.io/providers/microsoft/azuredevops/1.13.0/docs/data-sources/project) | data source |
-| [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
+| [azuredevops_branch_policy_min_reviewer_count.main](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/resources/branch_policy_min_reviewer_count) | resource |
+| [azuredevops_git_repository.main](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/resources/git_repository) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_azuredevops_project"></a> [azuredevops\_project](#input\_azuredevops\_project) | The name of the Azure DevOps project where repositories will be created. | `string` | n/a | yes |
-| <a name="input_init_type"></a> [init\_type](#input\_init\_type) | Defines how the repository should be initialized:<br/>- Uninitialized: Creates an empty repository<br/>- Clean: Creates a repository with a README<br/>- Import: Imports content from an existing repository | `string` | `"Clean"` | no |
-| <a name="input_repo_enabled"></a> [repo\_enabled](#input\_repo\_enabled) | Boolean flag to control whether repositories should be created. | `bool` | `true` | no |
-| <a name="input_repositories"></a> [repositories](#input\_repositories) | Map of repositories to create. Each repository can have its own default branch.<br/><br/>Example:<br/>repositories = {<br/>  repo1 = {<br/>    name           = "repo1"<br/>    default\_branch = "main"<br/>  }<br/>  repo2 = {<br/>    name           = "repo2"<br/>    default\_branch = "master"<br/>  }<br/>} | <pre>map(object({<br/>    name           = string<br/>    default_branch = optional(string)<br/>  }))</pre> | n/a | yes |
+| <a name="input_default_branch"></a> [default\_branch](#input\_default\_branch) | The default branch of the repository. | `string` | `"refs/heads/main"` | no |
+| <a name="input_enable_branch_protection"></a> [enable\_branch\_protection](#input\_enable\_branch\_protection) | Whether to enable minimum reviewer count branch protection policy. | `bool` | `false` | no |
+| <a name="input_init_type"></a> [init\_type](#input\_init\_type) | How the repository should be initialized. Valid values: 'Clean', 'Fork', 'Import', 'Uninitialized'. | `string` | `"Clean"` | no |
+| <a name="input_min_reviewer_count"></a> [min\_reviewer\_count](#input\_min\_reviewer\_count) | The minimum number of reviewers required for pull requests on the protected branch. | `number` | `1` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name of the Git repository. | `string` | n/a | yes |
+| <a name="input_parent_repository_id"></a> [parent\_repository\_id](#input\_parent\_repository\_id) | The ID of a repository to fork. Only applicable when init\_type is 'Fork'. | `string` | `null` | no |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID of the Azure DevOps project in which to create the repository. | `string` | n/a | yes |
+| <a name="input_protected_branch"></a> [protected\_branch](#input\_protected\_branch) | The branch ref to apply the protection policy to. | `string` | `"refs/heads/main"` | no |
+| <a name="input_service_connection_id"></a> [service\_connection\_id](#input\_service\_connection\_id) | The ID of the service connection used for private repository imports. Only applicable when init\_type is 'Import'. | `string` | `null` | no |
+| <a name="input_source_type"></a> [source\_type](#input\_source\_type) | The type of source when importing a repository. Only applicable when init\_type is 'Import'. Valid value: 'Git'. | `string` | `null` | no |
+| <a name="input_source_url"></a> [source\_url](#input\_source\_url) | The URL of the source repository when importing. Only applicable when init\_type is 'Import'. | `string` | `null` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_repository_branches"></a> [repository\_branches](#output\_repository\_branches) | Default branches of the created repositories. |
-| <a name="output_repository_ids"></a> [repository\_ids](#output\_repository\_ids) | IDs of the created repositories. |
-| <a name="output_repository_names"></a> [repository\_names](#output\_repository\_names) | Names of the created repositories. |
-| <a name="output_repository_urls"></a> [repository\_urls](#output\_repository\_urls) | Remote URLs of the created repositories. |
+| <a name="output_default_branch"></a> [default\_branch](#output\_default\_branch) | The default branch of the repository. |
+| <a name="output_id"></a> [id](#output\_id) | The ID of the created Git repository. |
+| <a name="output_name"></a> [name](#output\_name) | The name of the created Git repository. |
+| <a name="output_remote_url"></a> [remote\_url](#output\_remote\_url) | The HTTPS remote URL of the repository. |
+| <a name="output_ssh_url"></a> [ssh\_url](#output\_ssh\_url) | The SSH URL of the repository. |
+| <a name="output_web_url"></a> [web\_url](#output\_web\_url) | The web URL of the repository. |
+<!-- END_TF_DOCS -->
