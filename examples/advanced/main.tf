@@ -1,6 +1,6 @@
 # Import an existing public GitHub repo and enforce a 2-reviewer policy on main
 module "ado_repo" {
-  source = "github.com/Think-Cube/terraform-azuredevops-repository?ref=v1.0.0"
+  source = "../.."
 
   project_id     = "00000000-1111-2222-3333-444444444444"
   name           = "myapp-service"
