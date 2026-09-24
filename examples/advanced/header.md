@@ -1,4 +1,3 @@
-<!-- BEGIN_TF_DOCS -->
 # Example: Advanced — Azuredevops Repository
 
 Provisions an Azure DevOps Git Repository with configurable branch protection policies. Full-featured example with optional configuration blocks enabled.
@@ -22,17 +21,3 @@ module "ado_repo" {
   protected_branch         = "refs/heads/main"
 }
 ```
-
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
-| <a name="requirement_azuredevops"></a> [azuredevops](#requirement\_azuredevops) | ~> 1.0 |
-
-## Modules
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_ado_repo"></a> [ado\_repo](#module\_ado\_repo) | ../.. | n/a |
-<!-- END_TF_DOCS -->
